@@ -1,0 +1,39 @@
+version: '3'
+
+volumes:
+  mysql_data:
+      driver: local
+
+services:
+  patatedouce:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    container_name: mariadb_patatedouce
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: patatedouce
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    container_name: keycloak_patatedouce
+    environment:
+      DB_VENDOR: mariadb
+      DB_ADDR: patatedouce
+      DB_DATABASE: patatedouce
+      DB_USER: root
+      DB_PASSWORD: root
+      KEYCLOAK_USER: user
+      KEYCLOAK_PASSWORD: bitnami
+      JGROUPS_DISCOVERY_PROTOCOL: JDBC_PING
+    ports:
+      - "9009:8080"
+    depends_on:
+      - patatedouce
