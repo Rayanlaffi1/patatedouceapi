@@ -74,15 +74,15 @@ public class ClientService {
 			if(client != null){
 				Aliment aliment = alimentRepository.findById(alimentId).orElseThrow();
 				List<PanierAchat> panierAchats = client.getPanierAchats();
-				Aliment alimentToFind = null;
+				PanierAchat panierAchatToFind = null;
 				for (PanierAchat panierAchat : panierAchats) {
 					if (panierAchat.getAliment().equals(aliment)) {
-						alimentToFind = aliment;
+						panierAchatToFind = panierAchat;
 						break;
 					}
 				}
-				if(alimentToFind != null){
-					client.getListeRecettesFavoris().remove(alimentToFind);
+				if(panierAchatToFind != null){
+					client.getPanierAchats().remove(panierAchatToFind);
 				}
 			}
 			return clientRepository.save(client);

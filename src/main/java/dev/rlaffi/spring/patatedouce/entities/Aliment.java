@@ -72,20 +72,4 @@ public class Aliment {
 		this.typeAliment = typeAliment;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
-		Aliment other = (Aliment) obj;
-		return Objects.equals(id, other.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
 }
