@@ -31,6 +31,17 @@ public class ClientController {
 	public Client ajouterAliment(Integer alimentId, Integer qte) {
 		return clientService.ajouterAliment(alimentId,qte);
 	}
-
+	@PostMapping("/supprimerpanierachat/")
+	public Client supprimerAliment(Integer alimentId) {
+		return clientService.supprimerAliment(alimentId);
+	}
+	@PostMapping("/ajouterrecettefavoris/")
+	public Client ajouterRecetteFavoris(Integer recette_id) {
+		return clientService.ajouterRecetteFavoris(recette_id);
+	}
+	@PostMapping("/supprimerrecettefavoris/")
+	public Client supprimerRecetteFavoris(Integer recette_id) {
+		return clientService.supprimerRecetteFavoris(recette_id);
+	}
 
 }

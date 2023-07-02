@@ -1,10 +1,7 @@
 package dev.rlaffi.spring.patatedouce.services;
 
 import dev.rlaffi.spring.patatedouce.entities.*;
-import dev.rlaffi.spring.patatedouce.repositories.AlimentRepository;
-import dev.rlaffi.spring.patatedouce.repositories.ClientRepository;
-import dev.rlaffi.spring.patatedouce.repositories.PanierAchatRepository;
-import dev.rlaffi.spring.patatedouce.repositories.UtilisateurRepository;
+import dev.rlaffi.spring.patatedouce.repositories.*;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
@@ -21,6 +18,10 @@ import java.util.List;
 @Service
 public class ClientService {
 	private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
+	@Autowired
+	private RecettesFavorisRepository recettesFavorisRepository;
+	@Autowired
+	private RecetteRepository recetteRepository;
 	@Autowired
 	private PanierAchatRepository panierAchatRepository;
 	@Autowired
@@ -63,5 +64,81 @@ public class ClientService {
 			return null;
 		}
 	}
+	public Client supprimerAliment(Integer alimentId) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Jwt jwt = (Jwt) authentication.getPrincipal();
+		String userId = jwt.getSubject();
+		if (authentication != null && userId != null) {
+			Utilisateur utilisateur = liaisonUtilisateurService.getById(userId);
+			Client client = clientRepository.findByEmail(utilisateur.getEmail());
+			if(client != null){
+				Aliment aliment = alimentRepository.findById(alimentId).orElseThrow();
+				List<PanierAchat> panierAchats = client.getPanierAchats();
+				Aliment alimentToFind = null;
+				for (PanierAchat panierAchat : panierAchats) {
+					if (panierAchat.getAliment().equals(aliment)) {
+						alimentToFind = aliment;
+						break;
+					}
+				}
+				if(alimentToFind != null){
+					client.getListeRecettesFavoris().remove(alimentToFind);
+				}
+			}
+			return clientRepository.save(client);
+		} else {
+			return null;
+		}
+	}
 
+	public Client ajouterRecetteFavoris(Integer recette_id) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Jwt jwt = (Jwt) authentication.getPrincipal();
+		String userId = jwt.getSubject();
+		if (authentication != null && userId != null) {
+			Utilisateur utilisateur = liaisonUtilisateurService.getById(userId);
+			Client client = clientRepository.findByEmail(utilisateur.getEmail());
+			if(client != null){
+				Recette recette = recetteRepository.findById(recette_id).orElseThrow();
+				List<RecetteFavoris> recetteFavorites = client.getListeRecettesFavoris();
+				for (RecetteFavoris recetteFavoris : recetteFavorites) {
+					if (recetteFavoris.getRecette().equals(recette)) {
+						return clientRepository.save(client);
+					}
+				}
+				RecetteFavoris recetteFavoris = new RecetteFavoris(recette,client);
+				recettesFavorisRepository.save(recetteFavoris);
+				client.getListeRecettesFavoris().add(recetteFavoris);
+			}
+			return clientRepository.save(client);
+		} else {
+			return null;
+		}
+	}
+	public Client supprimerRecetteFavoris(Integer recette_id) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Jwt jwt = (Jwt) authentication.getPrincipal();
+		String userId = jwt.getSubject();
+		if (authentication != null && userId != null) {
+			Utilisateur utilisateur = liaisonUtilisateurService.getById(userId);
+			Client client = clientRepository.findByEmail(utilisateur.getEmail());
+			if(client != null){
+				Recette recette = recetteRepository.findById(recette_id).orElseThrow();
+				List<RecetteFavoris> recetteFavorites = client.getListeRecettesFavoris();
+				RecetteFavoris favorisToFind = null;
+				for (RecetteFavoris favoris : recetteFavorites) {
+					if (favoris.getRecette().equals(recette)) {
+						favorisToFind = favoris;
+						break;
+					}
+				}
+				if(favorisToFind != null){
+					client.getListeRecettesFavoris().remove(favorisToFind);
+				}
+			}
+			return clientRepository.save(client);
+		} else {
+			return null;
+		}
+	}
 }
