@@ -36,11 +36,19 @@ public class AlimentService {
 	public List<Aliment> getAll() {
 		return alimentRepository.findAll();
 	}
-
+	public void deleteById(Integer alimentId) {
+		alimentRepository.deleteById(alimentId);
+	}
 	public Aliment create(Aliment aliment) {
-		if (aliment.getTypeAliment().getNom() != null) {
-			TypeAliment typeAliment = typeAlimentRepository.findByNom(aliment.getTypeAliment().getNom());
-			aliment.setTypeAliment(typeAliment);
+		if (aliment.getTypeAliment() != null) {
+			TypeAliment typeAliment = aliment.getTypeAliment();
+			TypeAliment typeAlimentFound = typeAlimentRepository.findById(typeAliment.getId()).orElseThrow();
+			if(typeAlimentFound == null){
+				typeAliment = typeAlimentRepository.save(typeAliment);
+				aliment.setTypeAliment(typeAliment);
+			}else{
+				aliment.setTypeAliment(typeAlimentFound);
+			}
 		}
 		return alimentRepository.save(aliment);
 	}

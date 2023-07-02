@@ -11,18 +11,22 @@ public class StockMaraicher {
     @Id
     @JoinColumn(name = "aliment_id")
     private Aliment aliment;
+    @ManyToOne
     @Id
-    @Column(name = "utilisateur_id")
-    private String utilisateurId;
+    @JoinColumn(name = "user_id")
+    private Maraicher maraicher;
 
     @Column(name = "quantite")
     private int quantite;
+    @Column(name = "prixut")
+    private Float prixut;
     public StockMaraicher(){}
 
-    public StockMaraicher(Aliment aliment, String utilisateurId, int quantite) {
+    public StockMaraicher(Aliment aliment, Maraicher maraicher, int quantite, Float prixut) {
         this.aliment = aliment;
-        this.utilisateurId = utilisateurId;
+        this.maraicher = maraicher;
         this.quantite = quantite;
+        this.prixut = prixut;
     }
 
     public Aliment getAliment() {
@@ -33,12 +37,12 @@ public class StockMaraicher {
         this.aliment = aliment;
     }
 
-    public String getUtilisateurId() {
-        return utilisateurId;
+    public Maraicher getMaraicher() {
+        return maraicher;
     }
 
-    public void setUtilisateurId(String utilisateurId) {
-        this.utilisateurId = utilisateurId;
+    public void setMaraicher(Maraicher maraicher) {
+        this.maraicher = maraicher;
     }
 
     public int getQuantite() {
@@ -47,5 +51,13 @@ public class StockMaraicher {
 
     public void setQuantite(int quantite) {
         this.quantite = quantite;
+    }
+
+    public Float getPrixut() {
+        return prixut;
+    }
+
+    public void setPrixut(Float prixut) {
+        this.prixut = prixut;
     }
 }

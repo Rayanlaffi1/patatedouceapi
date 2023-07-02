@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 public class AlimentPanier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @ManyToOne

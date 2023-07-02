@@ -1,44 +1,33 @@
 package dev.rlaffi.spring.patatedouce.entities;
 
 import jakarta.persistence.*;
-import org.keycloak.representations.idm.RoleRepresentation;
-
-import java.util.List;
 
 @Entity
-@Table(name = "USER_ENTITY")
+@Table(name = "patatedouce_utilisateur")
 public class Utilisateur {
 	@Id
-	@Column(name = "ID")
-	private String id;
-	@Column(name = "FIRST_NAME")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@Column(name = "prenom")
 	private String prenom;
-	@Column(name = "LAST_NAME")
+	@Column(name = "nom")
 	private String nom;
-	@Column(name = "EMAIL")
+	@Column(name = "email")
 	private String email;
-	@OneToMany(mappedBy = "utilisateur")
-	private List<RoleMapping> roleMappings;
+	public Utilisateur(){}
 
-	@OneToMany(mappedBy = "utilisateur")
-	private List<PanierAchat> panierAchats;
-	public Utilisateur() {
-	}
-
-	public Utilisateur(String id, String prenom, String nom, String email, List<RoleMapping> roleMappings, List<PanierAchat> panierAchats) {
+	public Utilisateur(Long id, String prenom, String nom, String email) {
 		this.id = id;
 		this.prenom = prenom;
 		this.nom = nom;
 		this.email = email;
-		this.roleMappings = roleMappings;
-		this.panierAchats = panierAchats;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -64,21 +53,5 @@ public class Utilisateur {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public List<RoleMapping> getRoleMappings() {
-		return roleMappings;
-	}
-
-	public void setRoleMappings(List<RoleMapping> roleMappings) {
-		this.roleMappings = roleMappings;
-	}
-
-	public List<PanierAchat> getPanierAchats() {
-		return panierAchats;
-	}
-
-	public void setPanierAchats(List<PanierAchat> panierAchats) {
-		this.panierAchats = panierAchats;
 	}
 }

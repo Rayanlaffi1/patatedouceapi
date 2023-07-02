@@ -6,6 +6,7 @@ import dev.rlaffi.spring.patatedouce.services.AlimentService;
 import dev.rlaffi.spring.patatedouce.services.UtilisateurService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
@@ -29,6 +30,9 @@ public class AlimentController {
 	public Aliment create(@RequestBody Aliment aliment) {
 		return alimentService.create(aliment);
 	}
-
-
+	@DeleteMapping("/{alimentId}")
+	public ResponseEntity<String> deletePanierById(@PathVariable Integer alimentId) {
+		alimentService.deleteById(alimentId);
+		return ResponseEntity.ok("aliment retirée");
+	}
 }

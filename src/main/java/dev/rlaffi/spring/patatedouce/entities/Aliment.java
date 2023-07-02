@@ -6,6 +6,7 @@ import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "patatedouce_aliment")
@@ -15,7 +16,6 @@ public class Aliment {
 	private Integer id;
 	private String nom;
 	private String origine;
-	private Float prix;
 	private String image;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_typealiment")
@@ -24,11 +24,10 @@ public class Aliment {
 
 	public Aliment(){}
 
-	public Aliment(Integer id, String nom, String origine, Float prix, String image, TypeAliment typeAliment) {
+	public Aliment(Integer id, String nom, String origine, String image, TypeAliment typeAliment) {
 		this.id = id;
 		this.nom = nom;
 		this.origine = origine;
-		this.prix = prix;
 		this.image = image;
 		this.typeAliment = typeAliment;
 	}
@@ -57,14 +56,6 @@ public class Aliment {
 		this.origine = origine;
 	}
 
-	public Float getPrix() {
-		return prix;
-	}
-
-	public void setPrix(Float prix) {
-		this.prix = prix;
-	}
-
 	public String getImage() {
 		return image;
 	}
@@ -79,5 +70,22 @@ public class Aliment {
 
 	public void setTypeAliment(TypeAliment typeAliment) {
 		this.typeAliment = typeAliment;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		Aliment other = (Aliment) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

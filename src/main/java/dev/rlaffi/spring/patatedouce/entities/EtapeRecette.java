@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 public class EtapeRecette {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
     @ManyToOne
