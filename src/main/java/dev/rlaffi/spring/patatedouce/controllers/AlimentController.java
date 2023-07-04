@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
 import java.util.List;
-@Tag(name="Aliments")
+@Tag(name="Aliments", description = "Gestion des aliments")
 @RestController
 @RequestMapping("/aliment")
 public class AlimentController {

@@ -7,15 +7,17 @@ import org.keycloak.representations.idm.UserRepresentation;
 @Entity
 @Table(name = "patatedouce_stock_maraicher")
 public class StockMaraicher {
-    @ManyToOne
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    private Long id;
+    @ManyToOne
     @JoinColumn(name = "aliment_id")
     private Aliment aliment;
     @ManyToOne
-    @Id
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "maraicher_id")
+    @JsonIgnore
     private Maraicher maraicher;
-
     @Column(name = "quantite")
     private int quantite;
     @Column(name = "prixut")
@@ -27,6 +29,14 @@ public class StockMaraicher {
         this.maraicher = maraicher;
         this.quantite = quantite;
         this.prixut = prixut;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Aliment getAliment() {

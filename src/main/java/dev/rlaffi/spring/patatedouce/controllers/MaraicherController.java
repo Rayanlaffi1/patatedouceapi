@@ -6,10 +6,7 @@ import dev.rlaffi.spring.patatedouce.services.ClientService;
 import dev.rlaffi.spring.patatedouce.services.MaraicherService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +24,8 @@ public class MaraicherController {
 	public List<Maraicher> getAll() {
 		return maraicherService.getMaraichers();
 	}
-
+	@PostMapping("/ajouterstock/")
+	public Maraicher ajouterArticle(Integer alimentId, Integer quantite, Float prixut) {
+		return maraicherService.ajouterArticle( alimentId,  quantite,  prixut);
+	}
 }
