@@ -24,7 +24,7 @@ public class Aliment {
 	private Float prixut;
 	private Integer quantite;
 	private String image;
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne
 	@JoinColumn(name = "id_typealiment")
 	@NotNull
 	private TypeAliment typeAliment = new TypeAliment();

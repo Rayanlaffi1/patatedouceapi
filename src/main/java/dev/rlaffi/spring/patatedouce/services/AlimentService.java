@@ -49,7 +49,9 @@ public class AlimentService {
 				Maraicher maraicher = maraicherRepository.findByEmail(utilisateur.getEmail());
 				Aliment aliment = alimentRepository.findById(alimentId).orElseThrow(() -> new ResourceNotFoundException(Aliment.class, alimentId));
 				if(aliment.getMaraicher() == maraicher){
-					alimentRepository.deleteById(alimentId);
+					aliment.setTypeAliment(null);
+//					aliment.setMaraicher(null);
+					alimentRepository.delete(aliment);
 				}else{
 					throw new PermissionException("supprimer l'aliment.");
 				}
@@ -72,20 +74,16 @@ public class AlimentService {
 			}
 		}
 
-		if (aliment.getMaraicher() != null) {
-			Maraicher maraicher = aliment.getMaraicher();
-			if (maraicher.getId() != null) {
-				Maraicher maraicherFound = maraicherRepository.findById(maraicher.getId()).orElse(null);
-				if (maraicherFound == null) {
-					maraicher = maraicherRepository.save(maraicher);
-					aliment.setMaraicher(maraicher);
-				} else {
-					aliment.setMaraicher(maraicherFound);
-				}
-			}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Jwt jwt = (Jwt) authentication.getPrincipal();
+		String userId = jwt.getSubject();
+		if (authentication != null && userId != null) {
+			Utilisateur utilisateur = liaisonUtilisateurService.getById(userId);
+			Maraicher maraicher = maraicherRepository.findByEmail(utilisateur.getEmail());
+			aliment.setMaraicher(maraicher);
+			return alimentRepository.save(aliment);
 		}
-
-		return alimentRepository.save(aliment);
+		return null;
 	}
 
 }
