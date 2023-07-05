@@ -1,5 +1,10 @@
 package dev.rlaffi.spring.patatedouce.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import dev.rlaffi.spring.patatedouce.views.Views;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import net.minidev.json.annotate.JsonIgnore;
@@ -16,20 +21,29 @@ public class Aliment {
 	private Integer id;
 	private String nom;
 	private String origine;
+	private Float prixut;
+	private Integer quantite;
 	private String image;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id_typealiment")
 	@NotNull
 	private TypeAliment typeAliment = new TypeAliment();
-
+	@JsonIgnoreProperties("article")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_maraicher")
+	@NotNull
+	private Maraicher maraicher = new Maraicher();
 	public Aliment(){}
 
-	public Aliment(Integer id, String nom, String origine, String image, TypeAliment typeAliment) {
+	public Aliment(Integer id, String nom, String origine, Float prixut, Integer quantite, String image, TypeAliment typeAliment, Maraicher maraicher) {
 		this.id = id;
 		this.nom = nom;
 		this.origine = origine;
+		this.prixut = prixut;
+		this.quantite = quantite;
 		this.image = image;
 		this.typeAliment = typeAliment;
+		this.maraicher = maraicher;
 	}
 
 	public Integer getId() {
@@ -56,6 +70,22 @@ public class Aliment {
 		this.origine = origine;
 	}
 
+	public Float getPrixut() {
+		return prixut;
+	}
+
+	public void setPrixut(Float prixut) {
+		this.prixut = prixut;
+	}
+
+	public Integer getQuantite() {
+		return quantite;
+	}
+
+	public void setQuantite(Integer quantite) {
+		this.quantite = quantite;
+	}
+
 	public String getImage() {
 		return image;
 	}
@@ -72,4 +102,11 @@ public class Aliment {
 		this.typeAliment = typeAliment;
 	}
 
+	public Maraicher getMaraicher() {
+		return maraicher;
+	}
+
+	public void setMaraicher(Maraicher maraicher) {
+		this.maraicher = maraicher;
+	}
 }

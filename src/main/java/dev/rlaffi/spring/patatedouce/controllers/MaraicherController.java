@@ -24,8 +24,8 @@ public class MaraicherController {
 	public List<Maraicher> getAll() {
 		return maraicherService.getMaraichers();
 	}
-	@PostMapping("/ajouterstock/")
-	public Maraicher ajouterArticle(Integer alimentId, Integer quantite, Float prixut) {
-		return maraicherService.ajouterArticle( alimentId,  quantite,  prixut);
-	}
+//	@PostMapping("/ajouterstock/")
+//	public Maraicher ajouterArticle(Integer alimentId, Integer quantite, Float prixut) {
+//		return maraicherService.ajouterArticle( alimentId,  quantite,  prixut);
+//	}
 }

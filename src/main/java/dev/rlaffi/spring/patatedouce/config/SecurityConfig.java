@@ -31,16 +31,18 @@ public class SecurityConfig  {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .ignoringRequestMatchers("/utilisateur/connexion")
-                .and()
+        http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/**", "/swagger-ui/**").permitAll()
-                .requestMatchers(HttpMethod.PUT,"/utilisateur/**").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.PUT,"/utilisateur/creation/maraicher/**").permitAll()
+                .requestMatchers(HttpMethod.PUT,"/utilisateur/creation/client/**").permitAll()
                 .requestMatchers(HttpMethod.GET,"/utilisateur/**").hasRole("ADMIN")
 
-                .requestMatchers(HttpMethod.POST,"/utilisateur/connexion").permitAll()
-                .requestMatchers(HttpMethod.POST,"/utilisateur/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/aliment").hasAnyRole("ADMIN", "MARAICHER")
+                .requestMatchers(HttpMethod.DELETE,"/aliment/**").hasAnyRole("ADMIN", "MARAICHER")
+                .requestMatchers(HttpMethod.GET,"/aliment/**").permitAll()
+
                 .anyRequest().authenticated();
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

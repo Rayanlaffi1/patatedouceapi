@@ -1,9 +1,14 @@
 package dev.rlaffi.spring.patatedouce.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import dev.rlaffi.spring.patatedouce.entities.Aliment;
 import dev.rlaffi.spring.patatedouce.entities.Utilisateur;
+import dev.rlaffi.spring.patatedouce.exceptions.PermissionException;
+import dev.rlaffi.spring.patatedouce.exceptions.ResourceNotFoundException;
 import dev.rlaffi.spring.patatedouce.services.AlimentService;
 import dev.rlaffi.spring.patatedouce.services.UtilisateurService;
+import dev.rlaffi.spring.patatedouce.views.Views;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +24,7 @@ public class AlimentController {
 	private AlimentService alimentService;
 
 	@GetMapping("{id}")
-	public Aliment get(@PathVariable Integer id) {
+	public Aliment get(@PathVariable Integer id) throws ResourceNotFoundException {
 		return alimentService.get(id);
 	}
 	@GetMapping("/all")
@@ -31,8 +36,7 @@ public class AlimentController {
 		return alimentService.create(aliment);
 	}
 	@DeleteMapping("/{alimentId}")
-	public ResponseEntity<String> deletePanierById(@PathVariable Integer alimentId) {
+	public void deletePanierById(@PathVariable Integer alimentId) throws ResourceNotFoundException, PermissionException {
 		alimentService.deleteById(alimentId);
-		return ResponseEntity.ok("aliment retirée");
 	}
 }

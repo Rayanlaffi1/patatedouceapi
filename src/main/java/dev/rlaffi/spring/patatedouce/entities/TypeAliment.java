@@ -1,5 +1,7 @@
 package dev.rlaffi.spring.patatedouce.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import dev.rlaffi.spring.patatedouce.views.Views;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
