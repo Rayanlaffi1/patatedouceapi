@@ -43,7 +43,33 @@ public class SecurityConfig  {
                 .requestMatchers(HttpMethod.DELETE,"/aliment/**").hasAnyRole("ADMIN", "MARAICHER")
                 .requestMatchers(HttpMethod.GET,"/aliment/**").permitAll()
 
-                .anyRequest().authenticated();
+                .requestMatchers(HttpMethod.GET,"/recette/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/recette/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/recette/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/recette/**").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.GET,"/typealiment/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/typealiment/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/typealiment/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/typealiment/**").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.GET,"/panier/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/panier/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/panier/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/panier/**").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.GET,"/etape/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/etape/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"/etape/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/etape/**").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.GET,"/client/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/maraicher/**").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.POST,"/client/**").hasAnyRole("ADMIN", "CLIENT")
+                .requestMatchers(HttpMethod.POST,"/maraicher/**").hasAnyRole("ADMIN", "MARAICHER")
+
+                .anyRequest().hasRole("ADMIN");
         http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthConverter);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
