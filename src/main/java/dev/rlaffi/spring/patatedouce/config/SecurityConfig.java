@@ -12,6 +12,11 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -28,10 +33,13 @@ public class SecurityConfig  {
     SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
-
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .cors()
+                .configurationSource(corsConfigurationSource())
+                .and()
+                .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/**", "/swagger-ui/**").permitAll()
 
@@ -43,22 +51,22 @@ public class SecurityConfig  {
                 .requestMatchers(HttpMethod.DELETE,"/aliment/**").hasAnyRole("ADMIN", "MARAICHER")
                 .requestMatchers(HttpMethod.GET,"/aliment/**").permitAll()
 
-                .requestMatchers(HttpMethod.GET,"/recette/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/recette/**").permitAll()
                 .requestMatchers(HttpMethod.PUT,"/recette/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/recette/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/recette/**").hasRole("ADMIN")
 
-                .requestMatchers(HttpMethod.GET,"/typealiment/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/typealiment/**").permitAll()
                 .requestMatchers(HttpMethod.PUT,"/typealiment/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/typealiment/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/typealiment/**").hasRole("ADMIN")
 
-                .requestMatchers(HttpMethod.GET,"/panier/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/panier/**").permitAll()
                 .requestMatchers(HttpMethod.PUT,"/panier/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/panier/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/panier/**").hasRole("ADMIN")
 
-                .requestMatchers(HttpMethod.GET,"/etape/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/etape/**").permitAll()
                 .requestMatchers(HttpMethod.PUT,"/etape/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/etape/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/etape/**").hasRole("ADMIN")
@@ -74,5 +82,15 @@ public class SecurityConfig  {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
     }
-
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
